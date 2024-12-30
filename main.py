@@ -3,7 +3,7 @@ import ipaddress
 import argparse
 
 def traceroute(target, print_realtime=False, output_file=None):
-    process = subprocess.Popen(["tracert", target], stdout=subprocess.PIPE, text=True)
+    process = subprocess.Popen(["tracert", target], stdout=subprocess.PIPE, text=True, encoding="cp850")
 
     hops = []  # Stocker les différents sauts
     while True:
@@ -31,7 +31,7 @@ def traceroute(target, print_realtime=False, output_file=None):
     process.wait()
 
     if output_file:  # Stocke les résultats dans un fichier texte si l'option -o est activée
-        with open(output_file, "w") as file:
+        with open(output_file, "w", encoding="utf-8") as file:
             file.write("\n".join(hops))
         print(f"Les résultats ont été enregistrés dans le fichier : {output_file}")
 
