@@ -1,40 +1,52 @@
-import socket
+import subprocess
+import ipaddress
+import argparse
 
-# Vous importez les classes et fonctions nécessaires de Scapy pour créer et envoyer des paquets réseau.
-from scapy.all import IP, ICMP, sr1
+def traceroute(target, print_realtime=False, output_file=None):
+    process = subprocess.Popen(["tracert", target], stdout=subprocess.PIPE, text=True)
 
-# Cette fonction implémente un traceroute vers une destination donnée avec un nombre maximum de sauts spécifié.
-def traceroute(destination, max_hops=30):
-    print(f"Traceroute vers {destination} (max {max_hops} sauts):")
-
-    try:
-        # Résolution du nom de domaine en adresse IP
-        destination_ip = socket.gethostbyname(destination)
-        print(f"Adresse IP du site : {destination_ip}\n")
-    except socket.gaierror:
-        # Gestion de l'erreur si le domaine ne peut pas être résolu
-        print("Erreur : impossible de résoudre l'adresse.")
-        return
-
-    for ttl in range(1, max_hops + 1):
-        # Créer le paquet ICMP avec un TTL spécifique
-        packet = IP(dst=destination_ip, ttl=ttl) / ICMP()
-
-        # Envoyer le paquet et recevoir la réponse
-        reply = sr1(packet, verbose=0, timeout=2)
-
-        if reply is None:
-            # Si aucune réponse n'est reçue pour ce saut
-            print(f"{ttl}\t*\tPas de réponse")
+    hops = []  # Stocker les différents sauts
+    while True:
+        line = process.stdout.readline()
+        if not line:
+            break
         else:
-            # Afficher l'adresse IP du saut courant
-            print(f"{ttl}\t{reply.src}")
-            # Arrêter si on atteint la destination
-            if reply.src == destination_ip:
-                print("\nDestination atteinte.")
-                break
+            line = line.strip()
+            hops.append(line)
+
+            if print_realtime:  # Affiche les sauts en temps réel si l'option -p est activée
+                print(line)
+
+            # Identifier les adresses IP dans la ligne
+            elements = line.split()
+            for element in elements:
+                try:
+                    ip = ipaddress.IPv4Address(element)
+                    if print_realtime:  # Affiche les adresses IP en temps réel si -p
+                        print(f"Adresse IP du saut : {ip}")
+                    break
+                except ipaddress.AddressValueError:
+                    pass
+
+    process.wait()
+
+    if output_file:  # Stocke les résultats dans un fichier texte si l'option -o est activée
+        with open(output_file, "w") as file:
+            file.write("\n".join(hops))
+        print(f"Les résultats ont été enregistrés dans le fichier : {output_file}")
+
+    if not print_realtime:  # Si -p n'est pas activé, affiche les résultats une fois terminé
+        print("Traçage terminé. Résultats :")
+        print("\n".join(hops))
+
 
 if __name__ == "__main__":
-    # Entrée de l'utilisateur pour le domaine ou l'adresse IP
-    site = input("Entrez le nom de domaine ou l'adresse IP : ").strip()
-    traceroute(site)
+    parser = argparse.ArgumentParser(description="Traceroute avec options")
+    parser.add_argument("target", help="Adresse du site à tracer (ex : google.com)")
+    parser.add_argument("-p", action="store_true", help="Affiche les sauts en temps réel")
+    parser.add_argument("-o", metavar="fichier", help="Enregistre les résultats dans un fichier texte")
+
+    args = parser.parse_args()
+
+    # Appeler la fonction traceroute avec les options fournies
+    traceroute(target=args.target, print_realtime=args.p, output_file=args.o)
