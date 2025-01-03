@@ -1,16 +1,11 @@
-
-D‚termination de l'itin‚raire vers facebook.com [2a03:2880:f121:83:face:b00c:0:25de]
-avec un maximum de 30 sautsÿ:
-
-1    <1 ms    <1 ms    <1 ms  2a02:a03f:63be:bf00:365d:9eff:fe93:2f1b
-2     *        *        *     D‚lai d'attente de la demande d‚pass‚.
-3     *        *        *     D‚lai d'attente de la demande d‚pass‚.
-4     2 ms     3 ms     3 ms  ae-60-106.ibrstr5.isp.proximus.be [2a02:a000:1:fffa::1]
-5     3 ms     3 ms     2 ms  ae-1-1000.ibrstr6.isp.proximus.be [2a02:a000:1:fff1::1]
-6     3 ms     3 ms     4 ms  ae2.pr02.bru2.tfbnw.net [2620:0:1cff:dead:beee::165a]
-7     3 ms     3 ms     2 ms  po202.asw01.bru2.tfbnw.net [2620:0:1cff:dead:beef::7940]
-8     3 ms     3 ms     3 ms  po213.psw01.bru2.tfbnw.net [2620:0:1cff:dead:beef::7c95]
-9     5 ms     5 ms     5 ms  be1.msw1ag.01.bru2.tfbnw.net [2a03:2880:f021:ffff::d]
-10     4 ms     3 ms     3 ms  edge-star-mini6-shv-01-bru2.facebook.com [2a03:2880:f121:83:face:b00c:0:25de]
-
-Itin‚raire d‚termin‚.
+DÃ©termination du chemin vers facebook.com [2a03:2880:f121:83:face:b00c:0:25de]
+Hop 1: 2a02:a03f:63be:bf00:365d:9eff:fe93:2f1b
+Hop 2: *
+Hop 3: *
+Hop 4: 2a02:a000:1:fffa::1
+Hop 5: 2a02:a000:1:fff1::1
+Hop 6: 2620:0:1cff:dead:beee::165a
+Hop 7: 2620:0:1cff:dead:beef::7946
+Hop 8: 2620:0:1cff:dead:beef::7cab
+Hop 9: 2a03:2880:f021:ffff::3d
+Hop 10: 2a03:2880:f121:83:face:b00c:0:25de
